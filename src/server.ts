@@ -52,7 +52,10 @@ class Server {
                         for (const identifier in component.content) {
                             const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
                             if (typeof metadata[tag] != "object") continue;
-                            metadata[tag].push(component.content[identifier][0].insert);
+                            let val = JSON.stringify(component.content[identifier]);
+                            val = val.substr(val.indexOf('"insert":"') + 10);
+                            val = val.slice(0, val.indexOf('"'));
+                            metadata[tag].push(val);
                         }
                     } else {
                         let val = JSON.stringify(component.content);
