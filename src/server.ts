@@ -45,7 +45,11 @@ class Server {
             };
             article.data.content.forEach(component => {
                 if (!["title", "subtitle", "hero"].includes(component.identifier)) return;
-                else if (component.identifier == "hero") for (const identifier in component.content) metadata[`cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`].push(component.content[identifier][0].insert);
+                else if (component.identifier == "hero") {
+                     for (const identifier in component.content) {
+                          const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
+                          if(typeof metadata[tag] != "object") continue;
+                          metadata[tag].push(component.content[identifier][0].insert);
                 else metadata[`cf_${component.identifier}`].push(component.content.title[0].insert);
             });
             this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
