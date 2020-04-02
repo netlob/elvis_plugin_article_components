@@ -42,7 +42,7 @@ class Server {
                     if (!metadata.cf_components.includes(component.identifier)) metadata.cf_components.push(component.identifier);
                     if (["title", "subtitle", "hero", "headline", "author", "crosshead", "quote"].includes(component.identifier))
                         for (const identifier in component.content) {
-                            if (!(["title", "subtitle", "author"].includes(identifier) || (["crosshead", "quote"].includes(component.identifier) && identifier == "text"))) continue;
+                            if (!(["title", "subtitle", "author"].includes(identifier) || (["crosshead", "quote", "title"].includes(component.identifier) && identifier == "text"))) continue;
                             const tag = `cf_${identifier == "text" ? component.identifier : identifier}`;
                             if (typeof metadata[tag] != "object" || (component.identifier == "quote" && identifier == "author")) continue;
                             let str = JSON.stringify(component.content[identifier]);
