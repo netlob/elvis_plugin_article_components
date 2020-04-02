@@ -50,24 +50,24 @@ Some extra metadata fields have to be added in order for this plugin to work.
         <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
+    <field name="cf_author" group="ArticleComponents">
+        <storage storeInMetadata="true"/>
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
+        <data editable="true" datatype="text" multivalue="true" />
+    </field>
     <field name="cf_components" group="ArticleComponents">
         <storage storeInMetadata="true"/>
-        <compass index="tokenized" store="yes" excludeFromAll="false" />
-        <data editable="true" datatype="text" multivalue="true" />
-    </field>
-    <field name="cf_heroTitle" group="ArticleComponents">
-        <storage storeInMetadata="true"/>
-        <compass index="tokenized" store="yes" excludeFromAll="false" />
-        <data editable="true" datatype="text" multivalue="true" />
-    </field>
-    <field name="cf_heroSubtitle" group="ArticleComponents">
-        <storage storeInMetadata="true"/>
-        <compass index="tokenized" store="yes" excludeFromAll="false" />
-        <data editable="true" datatype="text" multivalue="true" />
-    </field>
-    <field name="cf_heroAuthor" group="ArticleComponents">
-        <storage storeInMetadata="true"/>
         <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
+        <data editable="true" datatype="text" multivalue="true" />
+    </field>
+    <field name="cf_quote" group="ArticleComponents">
+        <storage storeInMetadata="true"/>
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
+        <data editable="true" datatype="text" multivalue="true" />
+    </field>
+    <field name="cf_crosshead" group="ArticleComponents">
+        <storage storeInMetadata="true"/>
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
     ```

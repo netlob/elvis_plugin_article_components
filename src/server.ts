@@ -37,39 +37,25 @@ class Server {
             try {
                 const file = await this.downloadFile(`http://localhost:8080/api/asset/${req.body.assetId}/original`, `dump/${req.body.assetId}_${uuidV4()}.json`)
                 const article = JSON.parse(fs.readFileSync(file, "utf8"));
-                let metadata = {
-                    cf_title: [],
-                    cf_subtitle: [],
-                    cf_components: [],
-                    cf_heroTitle: [],
-                    cf_heroSubtitle: [],
-                    cf_heroAuthor: []
-                };
+                let metadata = JSON.parse(JSON.stringify(Config.fields));
                 article.data.content.forEach(component => {
                     if (!metadata.cf_components.includes(component.identifier)) metadata.cf_components.push(component.identifier);
-                    if (component.identifier == "headline") component.identifier = "title";
-                    if (!["title", "subtitle", "hero"].includes(component.identifier)) return;
-                    else if (component.identifier == "hero") {
+                    if (["title", "subtitle", "hero", "headline", "author", "crosshead", "quote"].includes(component.identifier))
                         for (const identifier in component.content) {
-                            const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
-                            if (typeof metadata[tag] != "object") continue;
-                            let val = JSON.stringify(component.content[identifier]);
-                            val = val.substr(val.indexOf('"insert":"') + 10);
-                            val = val.slice(0, val.indexOf('"'));
-                            metadata[tag].push(val);
-                            // metadata[tag].push(component.content[identifier].map(a => a.insert).join(','));
+                            if (!(["title", "subtitle", "author"].includes(identifier) || (["crosshead", "quote"].includes(component.identifier) && identifier == "text"))) continue;
+                            const tag = `cf_${identifier == "text" ? component.identifier : identifier}`;
+                            if (typeof metadata[tag] != "object" || (component.identifier == "quote" && identifier == "author")) continue;
+                            let str = JSON.stringify(component.content[identifier]);
+                            let end = "";
+                            while (str.indexOf('"insert":"') > -1) {
+                                str = str.substr(str.indexOf('"insert":"') + 10);
+                                let val = str.slice(0, str.indexOf('"'));
+                                end += val;
+                            }
+                            metadata[tag].push(end.trim());
                         }
-                    } else {
-                        let val = JSON.stringify(component.content);
-                        val = val.substr(val.indexOf('"insert":"') + 10);
-                        val = val.slice(0, val.indexOf('"'));
-                        metadata[`cf_${component.identifier}`].push(val);
-                    }
                 });
-                for (const field in metadata) {
-                    if (field == "cf_components") continue;
-                    metadata[field] = metadata[field].join(", ")
-                }
+                for (const field in metadata) metadata[field] = metadata[field].filter(Boolean)
                 console.log(metadata)
                 this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
                 res.sendStatus(200);

@@ -38,4 +38,13 @@ export class Config {
      * Elvis password.
      */
     static elvisPassword: string = process.env.IR_ELVIS_PASSWORD || 'changemenow';
+
+    static fields = {
+        cf_title: [],
+        cf_subtitle: [],
+        cf_author: [],
+        cf_components: [],
+        cf_quote: [],
+        cf_crosshead: []
+    }
 }
