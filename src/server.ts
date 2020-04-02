@@ -47,6 +47,7 @@ class Server {
                 };
                 article.data.content.forEach(component => {
                     if (!metadata.cf_components.includes(component.identifier)) metadata.cf_components.push(component.identifier);
+                    if (component.identifier == "headline") component.identifier = "title";
                     if (!["title", "subtitle", "hero"].includes(component.identifier)) return;
                     else if (component.identifier == "hero") {
                         for (const identifier in component.content) {
@@ -56,6 +57,7 @@ class Server {
                             val = val.substr(val.indexOf('"insert":"') + 10);
                             val = val.slice(0, val.indexOf('"'));
                             metadata[tag].push(val);
+                            // metadata[tag].push(component.content[identifier].map(a => a.insert).join(','));
                         }
                     } else {
                         let val = JSON.stringify(component.content);
@@ -64,6 +66,11 @@ class Server {
                         metadata[`cf_${component.identifier}`].push(val);
                     }
                 });
+                for (const field in metadata) {
+                    if (field == "cf_components") continue;
+                    metadata[field] = metadata[field].join(", ")
+                }
+                console.log(metadata)
                 this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
                 res.sendStatus(200);
                 fs.unlinkSync(file);
