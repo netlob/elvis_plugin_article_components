@@ -50,6 +50,8 @@ class Server {
                           const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
                           if(typeof metadata[tag] != "object") continue;
                           metadata[tag].push(component.content[identifier][0].insert);
+                     }
+                }
                 else metadata[`cf_${component.identifier}`].push(component.content.title[0].insert);
             });
             this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
