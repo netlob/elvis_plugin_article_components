@@ -39,25 +39,30 @@ Some extra metadata fields have to be added in order for this plugin to work.
 
 - Add the end of the "assetTypeBaseExt" tag in `/data/elvis/config/custom-assetinfo.xml` you will need to add a couple fields.
 - Required fields:
-  ```
-  <field name="cf_title" group="ArticleComponents">
+    ```
+    <field name="cf_title" group="ArticleComponents">
         <storage storeInMetadata="true"/>
-        <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
     <field name="cf_subtitle" group="ArticleComponents">
         <storage storeInMetadata="true"/>
-        <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
+        <data editable="true" datatype="text" multivalue="true" />
+    </field>
+    <field name="cf_components" group="ArticleComponents">
+        <storage storeInMetadata="true"/>
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
     <field name="cf_heroTitle" group="ArticleComponents">
         <storage storeInMetadata="true"/>
-        <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
     <field name="cf_heroSubtitle" group="ArticleComponents">
         <storage storeInMetadata="true"/>
-        <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
+        <compass index="tokenized" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
     <field name="cf_heroAuthor" group="ArticleComponents">
@@ -65,4 +70,4 @@ Some extra metadata fields have to be added in order for this plugin to work.
         <compass index="tokenized" analyzer="pureLowerCase" store="yes" excludeFromAll="false" />
         <data editable="true" datatype="text" multivalue="true" />
     </field>
-  ```
+    ```

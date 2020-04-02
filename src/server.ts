@@ -34,29 +34,40 @@ class Server {
         });
 
         this.app.post('/', async (req, res) => {
-            const file = await this.downloadFile(`http://localhost:8080/api/asset/${req.body.assetId}/original`, `dump/${req.body.assetId}_${uuidV4()}.json`)
-            const article = JSON.parse(fs.readFileSync(file, "utf8"));
-            let metadata = {
-                cf_title: [],
-                cf_subtitle: [],
-                cf_heroTitle: [],
-                cf_heroSubtitle: [],
-                cf_heroAuthor: []
-            };
-            article.data.content.forEach(component => {
-                if (!["title", "subtitle", "hero"].includes(component.identifier)) return;
-                else if (component.identifier == "hero") {
-                     for (const identifier in component.content) {
-                          const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
-                          if(typeof metadata[tag] != "object") continue;
-                          metadata[tag].push(component.content[identifier][0].insert);
-                     }
-                }
-                else metadata[`cf_${component.identifier}`].push(component.content.title[0].insert);
-            });
-            this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
-            res.sendStatus(200);
-            fs.unlinkSync(file);
+            try {
+                const file = await this.downloadFile(`http://localhost:8080/api/asset/${req.body.assetId}/original`, `dump/${req.body.assetId}_${uuidV4()}.json`)
+                const article = JSON.parse(fs.readFileSync(file, "utf8"));
+                let metadata = {
+                    cf_title: [],
+                    cf_subtitle: [],
+                    cf_components: [],
+                    cf_heroTitle: [],
+                    cf_heroSubtitle: [],
+                    cf_heroAuthor: []
+                };
+                article.data.content.forEach(component => {
+                    if (!metadata.cf_components.includes(component.identifier)) metadata.cf_components.push(component.identifier);
+                    if (!["title", "subtitle", "hero"].includes(component.identifier)) return;
+                    else if (component.identifier == "hero") {
+                        for (const identifier in component.content) {
+                            const tag = `cf_hero${identifier[0].toUpperCase() + identifier.substr(1)}`;
+                            if (typeof metadata[tag] != "object") continue;
+                            metadata[tag].push(component.content[identifier][0].insert);
+                        }
+                    } else {
+                        let val = JSON.stringify(component.content);
+                        val = val.substr(val.indexOf('"insert":"') + 10);
+                        val = val.slice(0, val.indexOf('"'));
+                        metadata[`cf_${component.identifier}`].push(val);
+                    }
+                });
+                this.apiManager.update(req.body.assetId, JSON.stringify(metadata));
+                res.sendStatus(200);
+                fs.unlinkSync(file);
+            } catch (e) {
+                console.error(e);
+                res.sendStatus(200);
+            }
         });
     }
 
