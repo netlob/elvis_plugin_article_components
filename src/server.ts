@@ -35,7 +35,7 @@ class Server {
 
         this.app.post('/', async (req, res) => {
             try {
-                const file = await this.downloadFile(`http://localhost:8080/api/asset/${req.body.assetId}/original`, `dump/${req.body.assetId}_${uuidV4()}.json`)
+                const file = await this.downloadFile(`${Config.elvisUrl}/api/asset/${req.body.assetId}/original`, `dump/${req.body.assetId}_${uuidV4()}.json`)
                 const article = JSON.parse(fs.readFileSync(file, "utf8"));
                 let metadata = JSON.parse(JSON.stringify(Config.fields));
                 article.data.content.forEach(component => {
